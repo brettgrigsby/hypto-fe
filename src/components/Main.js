@@ -50,8 +50,8 @@ class Main extends Component {
   }
 
   render() {
-    const { currentExchanges } = this.state;
-    if (!Object.keys(this.state.orderBook).length) { return <h1>soon...</h1>}
+    const { currentExchanges, orderBook } = this.state;
+    if (!orderBook || !Object.keys(orderBook).length) { return <h1>soon...</h1>}
     return (
       <div>
         <div
