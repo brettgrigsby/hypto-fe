@@ -1,12 +1,11 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://hypto.herokuapp.com'
+  baseURL: 'http://localhost:9000' // 'https://hypto.herokuapp.com'
 });
 
-const getBook = (onSuccess, market = 'BTC-LTC') => {
-  console.log('hit api')
-  return api.get(`/orderBooks?market=${market}`)
+const getBook = (onSuccess, market = 'BTC-LTC', exchanges = ['bittrex']) => {
+  return api.get(`/orderBooks?market=${market}&exchanges=${exchanges.join(',')}`)
     .then( function( payload ) {
       onSuccess(payload);
     })
@@ -15,9 +14,8 @@ const getBook = (onSuccess, market = 'BTC-LTC') => {
     });
 };
 
-const getVolume = (onSuccess, market = 'BTC-LTC') => {
-  console.log('hit volume api')
-  return api.get(`/volume?market=${market}`)
+const getVolume = (onSuccess, market = 'BTC-LTC', exchanges = ['bittrex']) => {
+  return api.get(`/volume?market=${market}&exchanges=${exchanges.join(',')}`)
     .then( function( payload ) {
       onSuccess(payload);
     })
