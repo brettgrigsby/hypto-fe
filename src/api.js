@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:9000' // 'https://hypto.herokuapp.com'
+  baseURL: 'https://hypto.herokuapp.com'
 });
 
 const getBook = (onSuccess, market = 'BTC-LTC', exchanges = ['bittrex']) => {
