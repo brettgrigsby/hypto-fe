@@ -12,7 +12,7 @@ class ListExchange extends Component {
       <div>
         <div
           onClick={() => {this.setState({ expanded: !this.state.expanded })}}
-          style={{height: 30, backgroundColor: '#ccebff', borderBottom: '1px solid #4db8ff', cursor: 'pointer', display: 'flex', alignItems: 'center', paddingLeft: 15}}
+          style={{height: 30, backgroundColor: 'rgba(153, 230, 255, 0.2)', borderBottom: '1px solid rgb(153, 230, 255)', cursor: 'pointer', display: 'flex', alignItems: 'center', paddingLeft: 15}}
         >
           {this.props.name.toUpperCase()}
         </div>
@@ -22,7 +22,7 @@ class ListExchange extends Component {
                 return(
                   <div
                   key={index}
-                  style={{height: 30, backgroundColor: '#e6f5ff', borderBottom: '1px solid #4db8ff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: 30, paddingRight: 15}}
+                  style={{height: 30, backgroundColor: 'rgba(153, 230, 255, 0.1)', borderBottom: '1px solid rgba(153, 230, 255, 0.2)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: 30, paddingRight: 15}}
                   >
                     <span>Quantity: {item.Quantity}</span>
                     <span>Rate: {item.Rate}</span>

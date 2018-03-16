@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import { getBook, getVolume } from '../api';
+import { getBook } from '../api';
 import Volume from './Volume';
 import OrderList from './OrderList';
 
@@ -29,7 +29,9 @@ class Main extends Component {
   }
 
   onBookSuccess({ data }) {
-    this.setState({ orderBook: data.book });
+    if(data.book) {
+      this.setState({ orderBook: data.book });
+    }
   }
 
   toggleExchange(exchange) {
@@ -49,9 +51,28 @@ class Main extends Component {
     this.setState({ currentCurrency: event.target.value });
   }
 
+  getTotalForType(volume) {
+    const rawTotal = Object.keys(volume).reduce((sum, exchange) => {
+      return volume[exchange].reduce((acc, order) => {
+        return acc + parseFloat(order.Quantity);
+      }, 0) + sum;
+    }, 0);
+    return Math.round(rawTotal * 100) / 100;
+  }
+
+  getTotalVolume() {
+    const { asks, bids } = this.state.orderBook;
+    if(!(asks && bids)) { return {}; }  
+    return {
+      asks: this.getTotalForType(asks),
+      bids: this.getTotalForType(bids)
+    }
+  }
+
   render() {
     const { currentExchanges, orderBook } = this.state;
-    if (!orderBook || !Object.keys(orderBook).length) { return <h1>soon...</h1>}
+    const totalVolume = this.getTotalVolume();
+    if (!Object.keys(orderBook).length) { return <h1>soon...</h1>}
     return (
       <div>
         <div
@@ -75,7 +96,7 @@ class Main extends Component {
                 <input
                   id={exchange}
                   type="checkbox"
-                  checked={this.state.currentExchanges.includes(exchange)}
+                  checked={currentExchanges.includes(exchange)}
                   onClick={() => this.toggleExchange(exchange)}
                 />
                 <label htmlFor={exchange}>
@@ -87,12 +108,19 @@ class Main extends Component {
         </div>
         <div style={{padding: 15}}>
           <div style={{marginTop: 15}}>
-            <h2 style={{textAlign: 'center'}}>Total Volume</h2>
+            <h2 style={{textAlign: 'center'}}>
+              Total Volume {
+                (totalVolume.asks && totalVolume.bids) &&
+                  <Fragment>
+                    - Asks: {totalVolume.asks} | Bids: {totalVolume.bids}
+                  </Fragment>
+              }
+            </h2>
             <div style={{height: 300, width: '50%', display: 'inline-block'}} >
-              <Volume type="bids" market={this.state.currentCurrency} exchanges={this.state.currentExchanges}/>
+              <Volume type="bids" market={this.state.currentCurrency} exchanges={currentExchanges}/>
             </div>
             <div style={{height: 300, width: '50%', display: 'inline-block'}} >
-              <Volume type="asks" market={this.state.currentCurrency} exchanges={this.state.currentExchanges}/>
+              <Volume type="asks" market={this.state.currentCurrency} exchanges={currentExchanges}/>
             </div>
           </div>
           <div style={{marginTop: 15}}>
